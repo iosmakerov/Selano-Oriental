@@ -38,7 +38,7 @@ struct ActiveSessionView: View {
         }
     }
     
-    // MARK: - Background
+
     @ViewBuilder
     private var backgroundView: some View {
         GeometryReader { geometry in
@@ -77,15 +77,15 @@ struct ActiveSessionView: View {
         }
     }
     
-    // MARK: - Active Content
+
     private var activeSessionContent: some View {
         VStack(spacing: 0) {
-            // Top Bar
+
             topBar
             
             Spacer()
             
-            // Motivational Text
+
             if viewModel.showMotivation {
                 Text(viewModel.motivationalText)
                     .font(AppFonts.h2)
@@ -100,16 +100,16 @@ struct ActiveSessionView: View {
             
             Spacer()
             
-            // Timer Display
+
             timerDisplay
             
             Spacer()
             
-            // Phase Indicator
+
             phaseIndicator
                 .padding(.bottom, AppSpacing.lg)
             
-            // Next Preview
+
             if !viewModel.nextPhaseText.isEmpty {
                 Text(viewModel.nextPhaseText)
                     .font(AppFonts.body)
@@ -117,13 +117,13 @@ struct ActiveSessionView: View {
                     .padding(.bottom, AppSpacing.lg)
             }
             
-            // Control Bar
+
             controlBar
                 .padding(.bottom, AppSpacing.xl)
         }
     }
     
-    // MARK: - Top Bar
+
     private var topBar: some View {
         HStack {
             Button {
@@ -160,35 +160,42 @@ struct ActiveSessionView: View {
         .padding(.top, AppSpacing.md)
     }
     
-    // MARK: - Timer Display
+
     private var timerDisplay: some View {
-        VStack(spacing: AppSpacing.md) {
-            // Circular Progress
-            ZStack {
-                Circle()
-                    .stroke(AppColors.backgroundElevated, lineWidth: 12)
-                
-                Circle()
-                    .trim(from: 0, to: viewModel.progress)
-                    .stroke(
-                        phaseColor,
-                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-                    .animation(.linear(duration: 0.5), value: viewModel.progress)
-                
-                VStack(spacing: AppSpacing.sm) {
-                    Text(formatTime(viewModel.timeRemaining))
-                        .font(AppFonts.timerDisplay)
-                        .foregroundColor(AppColors.textPrimary)
-                        .monospacedDigit()
+        GeometryReader { geometry in
+            let size = min(geometry.size.width * 0.7, geometry.size.height * 0.5, 280)
+            
+            VStack(spacing: AppSpacing.md) {
+
+                ZStack {
+                    Circle()
+                        .stroke(AppColors.backgroundElevated, lineWidth: 10)
                     
-                    Text(viewModel.currentPhase.displayName)
-                        .font(AppFonts.phaseLabel)
-                        .foregroundColor(phaseColor)
+                    Circle()
+                        .trim(from: 0, to: viewModel.progress)
+                        .stroke(
+                            phaseColor,
+                            style: StrokeStyle(lineWidth: 10, lineCap: .round)
+                        )
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear(duration: 0.5), value: viewModel.progress)
+                    
+                    VStack(spacing: AppSpacing.xs) {
+                        Text(formatTime(viewModel.timeRemaining))
+                            .font(size > 200 ? AppFonts.timerDisplay : AppFonts.timerDisplayMedium)
+                            .foregroundColor(AppColors.textPrimary)
+                            .monospacedDigit()
+                            .minimumScaleFactor(0.6)
+                        
+                        Text(viewModel.currentPhase.displayName)
+                            .font(AppFonts.phaseLabel)
+                            .foregroundColor(phaseColor)
+                            .minimumScaleFactor(0.8)
+                    }
                 }
+                .frame(width: size, height: size)
             }
-            .frame(width: 280, height: 280)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
@@ -200,7 +207,7 @@ struct ActiveSessionView: View {
         }
     }
     
-    // MARK: - Phase Indicator
+
     private var phaseIndicator: some View {
         HStack(spacing: 4) {
             ForEach(0..<viewModel.workout.rounds, id: \.self) { round in
@@ -214,12 +221,12 @@ struct ActiveSessionView: View {
         .padding(.horizontal, AppSpacing.md)
     }
     
-    // MARK: - Control Bar
+
     private var controlBar: some View {
         HStack(spacing: AppSpacing.xl) {
             Spacer()
             
-            // Main Pause Button
+
             Button {
                 viewModel.pause()
             } label: {
@@ -233,7 +240,7 @@ struct ActiveSessionView: View {
             
             Spacer()
             
-            // Skip Button
+
             Button {
                 viewModel.skipPhase()
             } label: {
@@ -249,7 +256,7 @@ struct ActiveSessionView: View {
         }
     }
     
-    // MARK: - Paused Overlay
+
     private var pausedOverlay: some View {
         ZStack {
             Color.black.opacity(0.8)
@@ -279,7 +286,7 @@ struct ActiveSessionView: View {
         }
     }
     
-    // MARK: - Helpers
+
     private func formatTime(_ seconds: Int) -> String {
         let mins = seconds / 60
         let secs = seconds % 60
@@ -290,7 +297,6 @@ struct ActiveSessionView: View {
     }
 }
 
-// MARK: - Round Indicator
 struct RoundIndicator: View {
     let round: Int
     let currentRound: Int
@@ -329,47 +335,52 @@ struct RoundIndicator: View {
     }
 }
 
-// MARK: - Completed View
 struct CompletedView: View {
     @ObservedObject var viewModel: SessionViewModel
     let onDismiss: () -> Void
     
     var body: some View {
-        VStack(spacing: AppSpacing.xl) {
-            Spacer()
-            
-            Image("session_complete")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 200)
-            
-            VStack(spacing: AppSpacing.sm) {
-                Text("Great Work!")
-                    .font(AppFonts.h1)
-                    .foregroundColor(AppColors.textPrimary)
-                
-                Text(viewModel.workout.name)
-                    .font(AppFonts.bodyLarge)
-                    .foregroundColor(AppColors.textSecondary)
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: AppSpacing.lg) {
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    Image("session_complete")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: min(160, geometry.size.width * 0.4))
+                        .frame(maxHeight: geometry.size.height * 0.25)
+                    
+                    VStack(spacing: AppSpacing.sm) {
+                        Text("Great Work!")
+                            .font(AppFonts.h1)
+                            .foregroundColor(AppColors.textPrimary)
+                        
+                        Text(viewModel.workout.name)
+                            .font(AppFonts.bodyLarge)
+                            .foregroundColor(AppColors.textSecondary)
+                    }
+                    
+
+                    VStack(spacing: AppSpacing.sm) {
+                        StatRow(title: "Duration", value: formatDuration(viewModel.totalElapsedTime))
+                        StatRow(title: "Rounds", value: "\(viewModel.workout.rounds)")
+                        StatRow(title: "Work Time", value: formatDuration(viewModel.workout.workDuration * viewModel.workout.rounds))
+                        StatRow(title: "Calories", value: "\(viewModel.estimatedCalories) kcal")
+                    }
+                    .padding(AppSpacing.md)
+                    .background(AppColors.backgroundCard)
+                    .cornerRadius(AppCorners.large)
+                    .padding(.horizontal, AppSpacing.lg)
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    PrimaryButton(title: "Done", action: onDismiss)
+                        .padding(.horizontal, AppSpacing.lg)
+                        .padding(.bottom, AppSpacing.lg)
+                }
+                .frame(minHeight: geometry.size.height)
             }
-            
-            // Stats Card
-            VStack(spacing: AppSpacing.md) {
-                StatRow(title: "Duration", value: formatDuration(viewModel.totalElapsedTime))
-                StatRow(title: "Rounds", value: "\(viewModel.workout.rounds)")
-                StatRow(title: "Work Time", value: formatDuration(viewModel.workout.workDuration * viewModel.workout.rounds))
-                StatRow(title: "Calories", value: "\(viewModel.estimatedCalories) kcal")
-            }
-            .padding(AppSpacing.lg)
-            .background(AppColors.backgroundCard)
-            .cornerRadius(AppCorners.large)
-            .padding(.horizontal, AppSpacing.lg)
-            
-            Spacer()
-            
-            PrimaryButton(title: "Done", action: onDismiss)
-                .padding(.horizontal, AppSpacing.lg)
-                .padding(.bottom, AppSpacing.xl)
         }
         .background(AppColors.backgroundPrimary)
     }

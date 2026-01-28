@@ -7,7 +7,7 @@ class StorageService: ObservableObject {
     
     private let defaults = UserDefaults.standard
     
-    // MARK: - Keys
+
     private enum Keys {
         static let onboardingCompleted = "onboarding_completed"
         static let userPreferences = "user_preferences"
@@ -17,7 +17,7 @@ class StorageService: ObservableObject {
         static let dataSchemaVersion = "data_schema_version"
     }
     
-    // MARK: - Published Properties
+
     @Published var onboardingCompleted: Bool {
         didSet {
             defaults.set(onboardingCompleted, forKey: Keys.onboardingCompleted)
@@ -42,7 +42,7 @@ class StorageService: ObservableObject {
         }
     }
     
-    // MARK: - Init
+
     private init() {
         self.onboardingCompleted = defaults.bool(forKey: Keys.onboardingCompleted)
         self.preferences = Self.loadPreferences()
@@ -52,7 +52,7 @@ class StorageService: ObservableObject {
         incrementLaunchCount()
     }
     
-    // MARK: - Preferences
+
     private static func loadPreferences() -> UserPreferences {
         guard let data = UserDefaults.standard.data(forKey: Keys.userPreferences) else {
             return .default
@@ -68,7 +68,7 @@ class StorageService: ObservableObject {
         }
     }
     
-    // MARK: - Workouts
+
     private static func loadWorkouts() -> [Workout] {
         guard let data = UserDefaults.standard.data(forKey: Keys.customWorkouts) else {
             return []
@@ -108,7 +108,7 @@ class StorageService: ObservableObject {
         }
     }
     
-    // MARK: - Sessions
+
     private static func loadSessions() -> [Session] {
         guard let data = UserDefaults.standard.data(forKey: Keys.sessionHistory) else {
             return []
@@ -138,7 +138,7 @@ class StorageService: ObservableObject {
         sessionHistory.removeAll()
     }
     
-    // MARK: - Stats
+
     var weeklyStats: (sessions: Int, totalTime: Int, streak: Int) {
         let calendar = Calendar.current
         guard let weekAgo = calendar.date(byAdding: .day, value: -7, to: Date()) else {
@@ -148,7 +148,7 @@ class StorageService: ObservableObject {
         let weeklySessions = sessionHistory.filter { $0.startedAt > weekAgo }
         let totalTime = weeklySessions.reduce(0) { $0 + $1.totalDuration }
         
-        // Calculate streak
+
         var streak = 0
         var currentDate = Date()
         
@@ -176,7 +176,7 @@ class StorageService: ObservableObject {
         return (weeklySessions.count, totalTime, streak)
     }
     
-    // MARK: - Launch Count
+
     private func incrementLaunchCount() {
         let count = defaults.integer(forKey: Keys.appLaunchCount)
         defaults.set(count + 1, forKey: Keys.appLaunchCount)
@@ -186,7 +186,7 @@ class StorageService: ObservableObject {
         defaults.integer(forKey: Keys.appLaunchCount)
     }
     
-    // MARK: - Reset
+
     func resetToDefaults() {
         preferences = .default
     }

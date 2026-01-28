@@ -21,7 +21,7 @@ struct QuickStartView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppSpacing.lg) {
-                    // Header with Quick Actions
+
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: AppSpacing.xs) {
                             Text("Quick Start")
@@ -36,12 +36,12 @@ struct QuickStartView: View {
                         Spacer()
                         
                         HStack(spacing: AppSpacing.sm) {
-                            // Stats Button
+
                             QuickActionButton(icon: "chart.bar.fill") {
                                 showStats = true
                             }
                             
-                            // Achievements Button
+
                             ZStack(alignment: .topTrailing) {
                                 QuickActionButton(icon: "trophy.fill") {
                                     showAchievements = true
@@ -58,7 +58,7 @@ struct QuickStartView: View {
                                 }
                             }
                             
-                            // Settings Button
+
                             QuickActionButton(icon: "gearshape.fill") {
                                 showSettings = true
                             }
@@ -66,7 +66,7 @@ struct QuickStartView: View {
                     }
                     .padding(.horizontal, AppSpacing.md)
                     
-                    // Last Workout Quick Repeat
+
                     if let session = lastSession {
                         LastWorkoutCard(session: session) {
                             repeatLastWorkout(session)
@@ -74,20 +74,20 @@ struct QuickStartView: View {
                         .padding(.horizontal, AppSpacing.md)
                     }
                     
-                    // Featured Card
+
                     FeaturedPresetCard(workout: Workout.tabata) {
                         startWorkout(Workout.tabata)
                     }
                     .padding(.horizontal, AppSpacing.md)
                     
-                    // Section Title
+
                     Text("Popular Workouts")
                         .font(AppFonts.h3)
                         .foregroundColor(AppColors.textPrimary)
                         .padding(.horizontal, AppSpacing.md)
                         .padding(.top, AppSpacing.sm)
                     
-                    // Preset Grid
+
                     LazyVGrid(columns: columns, spacing: AppSpacing.md) {
                         ForEach(Array(Workout.presets.dropFirst()), id: \.id) { preset in
                             PresetCardView(workout: preset) {
@@ -125,7 +125,7 @@ struct QuickStartView: View {
         } else if let preset = Workout.presets.first(where: { $0.id == session.workoutId }) {
             selectedWorkout = preset
         } else {
-            // Recreate workout from session
+
             selectedWorkout = Workout(
                 id: session.workoutId,
                 name: session.workoutName,
@@ -137,7 +137,6 @@ struct QuickStartView: View {
     }
 }
 
-// MARK: - Quick Action Button
 struct QuickActionButton: View {
     let icon: String
     let action: () -> Void
@@ -154,7 +153,6 @@ struct QuickActionButton: View {
     }
 }
 
-// MARK: - Last Workout Card
 struct LastWorkoutCard: View {
     let session: Session
     let action: () -> Void
@@ -201,7 +199,6 @@ struct LastWorkoutCard: View {
     }
 }
 
-// MARK: - Featured Preset Card
 struct FeaturedPresetCard: View {
     let workout: Workout
     let action: () -> Void
@@ -238,8 +235,8 @@ struct FeaturedPresetCard: View {
                     .font(.system(size: 48))
                     .foregroundColor(.white.opacity(0.3))
             }
-            .padding(AppSpacing.lg)
-            .frame(height: 180)
+            .padding(AppSpacing.md)
+            .frame(minHeight: 140, maxHeight: 160)
             .frame(maxWidth: .infinity)
             .background(
                 GeometryReader { geometry in
@@ -266,7 +263,6 @@ struct FeaturedPresetCard: View {
     }
 }
 
-// MARK: - Preset Card View
 struct PresetCardView: View {
     let workout: Workout
     let action: () -> Void
@@ -315,8 +311,8 @@ struct PresetCardView: View {
                     .font(AppFonts.caption)
                     .foregroundColor(AppColors.textSecondary)
             }
-            .padding(AppSpacing.md)
-            .frame(height: 120)
+            .padding(AppSpacing.sm)
+            .frame(minHeight: 100)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(AppColors.backgroundCard)
             .cornerRadius(AppCorners.large)

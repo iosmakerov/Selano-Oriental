@@ -1,7 +1,7 @@
 import Foundation
 
 enum MotivationalPhrases {
-    // MARK: - Work Phase
+
     static let workStart: [String] = [
         "Let's go!",
         "Push it!",
@@ -32,7 +32,7 @@ enum MotivationalPhrases {
         "End it strong!"
     ]
     
-    // MARK: - Rest Phase
+
     static let restStart: [String] = [
         "Breathe",
         "Recover",
@@ -49,7 +49,7 @@ enum MotivationalPhrases {
         "Almost time!"
     ]
     
-    // MARK: - Round Milestones
+
     static let halfwayDone: [String] = [
         "Halfway there!",
         "50% done!",
@@ -65,7 +65,7 @@ enum MotivationalPhrases {
         "Make it count!"
     ]
     
-    // MARK: - Completion
+
     static let sessionComplete: [String] = [
         "Amazing work!",
         "You crushed it!",
@@ -76,7 +76,7 @@ enum MotivationalPhrases {
         "You're on fire!"
     ]
     
-    // MARK: - Random Getters
+
     static func randomWorkStart() -> String {
         workStart.randomElement() ?? "Go!"
     }

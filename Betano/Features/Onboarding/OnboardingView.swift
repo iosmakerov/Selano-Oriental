@@ -42,40 +42,44 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - Welcome Page
 struct WelcomePageView: View {
     let onContinue: () -> Void
     
     var body: some View {
-        VStack(spacing: AppSpacing.lg) {
-            Spacer()
-            
-            Image("onboarding_welcome")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 280)
-            
-            VStack(spacing: AppSpacing.sm) {
-                Text("SprintBolt")
-                    .font(AppFonts.h1)
-                    .foregroundColor(AppColors.textPrimary)
-                
-                Text("Unleash Your Speed")
-                    .font(AppFonts.bodyLarge)
-                    .foregroundColor(AppColors.textSecondary)
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: AppSpacing.lg) {
+                    Spacer(minLength: AppSpacing.xl)
+                    
+                    Image("onboarding_welcome")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: min(280, geometry.size.width * 0.7))
+                        .frame(maxHeight: geometry.size.height * 0.35)
+                    
+                    VStack(spacing: AppSpacing.sm) {
+                        Text("Selano Oriental")
+                            .font(AppFonts.h1)
+                            .foregroundColor(AppColors.textPrimary)
+                        
+                        Text("Unleash Your Speed")
+                            .font(AppFonts.bodyLarge)
+                            .foregroundColor(AppColors.textSecondary)
+                    }
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    PrimaryButton(title: "Continue", action: onContinue)
+                        .padding(.horizontal, AppSpacing.lg)
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                }
+                .frame(minHeight: geometry.size.height)
             }
-            
-            Spacer()
-            
-            PrimaryButton(title: "Continue", action: onContinue)
-                .padding(.horizontal, AppSpacing.lg)
-            
-            Spacer().frame(height: 60)
         }
     }
 }
 
-// MARK: - Focus Page
 struct FocusPageView: View {
     @Binding var selectedFocus: TrainingFocus?
     let onContinue: () -> Void
@@ -86,37 +90,43 @@ struct FocusPageView: View {
     ]
     
     var body: some View {
-        VStack(spacing: AppSpacing.lg) {
-            Spacer().frame(height: AppSpacing.xxl)
-            
-            Image("onboarding_focus")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 200)
-            
-            Text("What's Your Focus?")
-                .font(AppFonts.h2)
-                .foregroundColor(AppColors.textPrimary)
-            
-            LazyVGrid(columns: columns, spacing: AppSpacing.md) {
-                ForEach(TrainingFocus.allCases, id: \.self) { focus in
-                    FocusCard(
-                        focus: focus,
-                        isSelected: selectedFocus == focus,
-                        action: { selectedFocus = focus }
-                    )
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: AppSpacing.md) {
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    Image("onboarding_focus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: min(160, geometry.size.width * 0.4))
+                        .frame(maxHeight: geometry.size.height * 0.2)
+                    
+                    Text("What's Your Focus?")
+                        .font(AppFonts.h2)
+                        .foregroundColor(AppColors.textPrimary)
+                    
+                    LazyVGrid(columns: columns, spacing: AppSpacing.sm) {
+                        ForEach(TrainingFocus.allCases, id: \.self) { focus in
+                            FocusCard(
+                                focus: focus,
+                                isSelected: selectedFocus == focus,
+                                action: { selectedFocus = focus }
+                            )
+                        }
+                    }
+                    .padding(.horizontal, AppSpacing.lg)
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    PrimaryButton(title: "Continue", action: onContinue)
+                        .padding(.horizontal, AppSpacing.lg)
+                        .opacity(selectedFocus != nil ? 1 : 0.5)
+                        .disabled(selectedFocus == nil)
+                    
+                    Spacer(minLength: AppSpacing.lg)
                 }
+                .frame(minHeight: geometry.size.height)
             }
-            .padding(.horizontal, AppSpacing.lg)
-            
-            Spacer()
-            
-            PrimaryButton(title: "Continue", action: onContinue)
-                .padding(.horizontal, AppSpacing.lg)
-                .opacity(selectedFocus != nil ? 1 : 0.5)
-                .disabled(selectedFocus == nil)
-            
-            Spacer().frame(height: 60)
         }
     }
 }
@@ -128,18 +138,21 @@ struct FocusCard: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: AppSpacing.sm) {
+            VStack(spacing: AppSpacing.xs) {
                 Image(systemName: focus.icon)
-                    .font(.system(size: 32))
+                    .font(.system(size: 28))
                     .foregroundColor(isSelected ? AppColors.boltRed : AppColors.textSecondary)
                 
                 Text(focus.title)
                     .font(AppFonts.caption)
                     .foregroundColor(AppColors.textPrimary)
                     .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 100)
+            .padding(.vertical, AppSpacing.md)
+            .padding(.horizontal, AppSpacing.sm)
             .background(AppColors.backgroundCard)
             .overlay(
                 RoundedRectangle(cornerRadius: AppCorners.medium)
@@ -150,43 +163,48 @@ struct FocusCard: View {
     }
 }
 
-// MARK: - Level Page
 struct LevelPageView: View {
     @Binding var selectedLevel: ExperienceLevel?
     let onContinue: () -> Void
     
     var body: some View {
-        VStack(spacing: AppSpacing.lg) {
-            Spacer().frame(height: AppSpacing.xxl)
-            
-            Image("onboarding_level")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 200)
-            
-            Text("Your Experience")
-                .font(AppFonts.h2)
-                .foregroundColor(AppColors.textPrimary)
-            
-            VStack(spacing: AppSpacing.md) {
-                ForEach(ExperienceLevel.allCases, id: \.self) { level in
-                    LevelCard(
-                        level: level,
-                        isSelected: selectedLevel == level,
-                        action: { selectedLevel = level }
-                    )
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: AppSpacing.md) {
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    Image("onboarding_level")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: min(160, geometry.size.width * 0.4))
+                        .frame(maxHeight: geometry.size.height * 0.2)
+                    
+                    Text("Your Experience")
+                        .font(AppFonts.h2)
+                        .foregroundColor(AppColors.textPrimary)
+                    
+                    VStack(spacing: AppSpacing.sm) {
+                        ForEach(ExperienceLevel.allCases, id: \.self) { level in
+                            LevelCard(
+                                level: level,
+                                isSelected: selectedLevel == level,
+                                action: { selectedLevel = level }
+                            )
+                        }
+                    }
+                    .padding(.horizontal, AppSpacing.lg)
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    PrimaryButton(title: "Continue", action: onContinue)
+                        .padding(.horizontal, AppSpacing.lg)
+                        .opacity(selectedLevel != nil ? 1 : 0.5)
+                        .disabled(selectedLevel == nil)
+                    
+                    Spacer(minLength: AppSpacing.lg)
                 }
+                .frame(minHeight: geometry.size.height)
             }
-            .padding(.horizontal, AppSpacing.lg)
-            
-            Spacer()
-            
-            PrimaryButton(title: "Continue", action: onContinue)
-                .padding(.horizontal, AppSpacing.lg)
-                .opacity(selectedLevel != nil ? 1 : 0.5)
-                .disabled(selectedLevel == nil)
-            
-            Spacer().frame(height: 60)
         }
     }
 }
@@ -228,44 +246,49 @@ struct LevelCard: View {
     }
 }
 
-// MARK: - Notifications Page
 struct NotificationsPageView: View {
     let onComplete: () -> Void
     
     var body: some View {
-        VStack(spacing: AppSpacing.lg) {
-            Spacer()
-            
-            Image("onboarding_notifications")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 200)
-            
-            VStack(spacing: AppSpacing.sm) {
-                Text("Stay on Track")
-                    .font(AppFonts.h2)
-                    .foregroundColor(AppColors.textPrimary)
-                
-                Text("Get audio cues during workouts even when screen is off")
-                    .font(AppFonts.bodyLarge)
-                    .foregroundColor(AppColors.textSecondary)
-                    .multilineTextAlignment(.center)
+        GeometryReader { geometry in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: AppSpacing.lg) {
+                    Spacer(minLength: AppSpacing.xl)
+                    
+                    Image("onboarding_notifications")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: min(160, geometry.size.width * 0.4))
+                        .frame(maxHeight: geometry.size.height * 0.25)
+                    
+                    VStack(spacing: AppSpacing.sm) {
+                        Text("Stay on Track")
+                            .font(AppFonts.h2)
+                            .foregroundColor(AppColors.textPrimary)
+                        
+                        Text("Get audio cues during workouts even when screen is off")
+                            .font(AppFonts.bodyLarge)
+                            .foregroundColor(AppColors.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, AppSpacing.lg)
+                    }
+                    
+                    Spacer(minLength: AppSpacing.lg)
+                    
+                    VStack(spacing: AppSpacing.md) {
+                        PrimaryButton(title: "Enable Notifications") {
+                            requestNotifications()
+                            onComplete()
+                        }
+                        
+                        TextButton(title: "Maybe Later", action: onComplete)
+                    }
                     .padding(.horizontal, AppSpacing.lg)
-            }
-            
-            Spacer()
-            
-            VStack(spacing: AppSpacing.md) {
-                PrimaryButton(title: "Enable Notifications") {
-                    requestNotifications()
-                    onComplete()
+                    
+                    Spacer(minLength: AppSpacing.lg)
                 }
-                
-                TextButton(title: "Maybe Later", action: onComplete)
+                .frame(minHeight: geometry.size.height)
             }
-            .padding(.horizontal, AppSpacing.lg)
-            
-            Spacer().frame(height: 60)
         }
     }
     

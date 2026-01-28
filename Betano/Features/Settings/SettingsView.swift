@@ -15,7 +15,7 @@ struct SettingsView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
-                        // Sound & Haptics
+
                         SettingsSection(title: "Sound & Haptics") {
                             SettingsToggle(
                                 title: "Sound Effects",
@@ -37,7 +37,7 @@ struct SettingsView: View {
                             
                         }
                         
-                        // Timer Preferences
+
                         SettingsSection(title: "Timer Preferences") {
                             CountdownSelector(
                                 value: Binding(
@@ -65,7 +65,7 @@ struct SettingsView: View {
                             )
                         }
                         
-                        // About
+
                         SettingsSection(title: "About") {
                             SettingsRow(
                                 title: "Version",
@@ -74,7 +74,7 @@ struct SettingsView: View {
                             )
                         }
                         
-                        // Data
+
                         SettingsSection(title: "Data") {
                             SettingsButton(
                                 title: "Clear History",
@@ -93,7 +93,7 @@ struct SettingsView: View {
                             }
                         }
                         
-                        // Disclaimer
+
                         Text("Consult a physician before starting any exercise program.")
                             .font(AppFonts.caption)
                             .foregroundColor(AppColors.textMuted)
@@ -141,7 +141,6 @@ struct SettingsView: View {
     
 }
 
-// MARK: - Settings Section
 struct SettingsSection<Content: View>: View {
     let title: String
     @ViewBuilder let content: Content
@@ -163,7 +162,6 @@ struct SettingsSection<Content: View>: View {
     }
 }
 
-// MARK: - Settings Toggle
 struct SettingsToggle: View {
     let title: String
     let icon: String
@@ -203,7 +201,6 @@ struct SettingsToggle: View {
     }
 }
 
-// MARK: - Settings Row
 struct SettingsRow: View {
     let title: String
     let icon: String
@@ -231,7 +228,6 @@ struct SettingsRow: View {
     }
 }
 
-// MARK: - Settings Link
 struct SettingsLink: View {
     let title: String
     let icon: String
@@ -261,7 +257,6 @@ struct SettingsLink: View {
     }
 }
 
-// MARK: - Settings Button
 struct SettingsButton: View {
     let title: String
     let icon: String
@@ -288,7 +283,6 @@ struct SettingsButton: View {
     }
 }
 
-// MARK: - Countdown Selector
 struct CountdownSelector: View {
     @Binding var value: Int
     let options = [3, 5, 10]

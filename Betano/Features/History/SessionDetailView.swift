@@ -17,18 +17,18 @@ struct SessionDetailView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
-                        // Completion Badge
+
                         completionBadge
                         
-                        // Stats Grid
+
                         statsGrid
                         
-                        // Timeline (optional enhancement)
+
                         timelineView
                         
                         Spacer().frame(height: AppSpacing.lg)
                         
-                        // Actions
+
                         VStack(spacing: AppSpacing.md) {
                             PrimaryButton(title: "Repeat Workout") {
                                 dismiss()
@@ -70,7 +70,7 @@ struct SessionDetailView: View {
         }
     }
     
-    // MARK: - Completion Badge
+
     private var completionBadge: some View {
         VStack(spacing: AppSpacing.md) {
             ZStack {
@@ -96,7 +96,7 @@ struct SessionDetailView: View {
                         .foregroundColor(AppColors.textSecondary)
                 }
             }
-            .frame(width: 140, height: 140)
+            .frame(width: 120, height: 120)
             
             if session.isCompleted {
                 HStack(spacing: AppSpacing.xs) {
@@ -112,7 +112,7 @@ struct SessionDetailView: View {
         .padding(.vertical, AppSpacing.lg)
     }
     
-    // MARK: - Stats Grid
+
     private var statsGrid: some View {
         VStack(spacing: AppSpacing.md) {
             HStack(spacing: AppSpacing.md) {
@@ -143,7 +143,7 @@ struct SessionDetailView: View {
         return "Low"
     }
     
-    // MARK: - Timeline
+
     private var timelineView: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
             Text("Session Timeline")
@@ -168,7 +168,7 @@ struct SessionDetailView: View {
         }
     }
     
-    // MARK: - Helpers
+
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -183,7 +183,6 @@ struct SessionDetailView: View {
     }
 }
 
-// MARK: - Stat Card
 struct StatCard: View {
     let icon: String
     let title: String

@@ -59,11 +59,11 @@ struct HistoryView: View {
     private var historyContent: some View {
         ScrollView {
             VStack(spacing: AppSpacing.lg) {
-                // Stats Card
+
                 StatsCardView()
                     .padding(.horizontal, AppSpacing.md)
                 
-                // Session List
+
                 LazyVStack(spacing: AppSpacing.sm) {
                     ForEach(groupedSessions, id: \.0) { group in
                         Section {
@@ -98,13 +98,13 @@ struct HistoryView: View {
     }
     
     private func repeatSession(_ session: Session) {
-        // Find workout by ID or create from session
+
         if let workout = storage.customWorkouts.first(where: { $0.id == session.workoutId }) {
             selectedWorkout = workout
         } else if let preset = Workout.presets.first(where: { $0.id == session.workoutId }) {
             selectedWorkout = preset
         } else {
-            // Create a workout from session data
+
             selectedWorkout = Workout(
                 id: session.workoutId,
                 name: session.workoutName,
@@ -116,7 +116,6 @@ struct HistoryView: View {
     }
 }
 
-// MARK: - Empty State
 struct EmptyHistoryView: View {
     var body: some View {
         VStack(spacing: AppSpacing.lg) {
@@ -140,7 +139,6 @@ struct EmptyHistoryView: View {
     }
 }
 
-// MARK: - Stats Card
 struct StatsCardView: View {
     @StateObject private var storage = StorageService.shared
     
@@ -200,13 +198,12 @@ struct StatItem: View {
     }
 }
 
-// MARK: - Session Row
 struct SessionRowView: View {
     let session: Session
     
     var body: some View {
         HStack(spacing: AppSpacing.md) {
-            // Completion Ring
+
             ZStack {
                 Circle()
                     .stroke(AppColors.backgroundElevated, lineWidth: 4)

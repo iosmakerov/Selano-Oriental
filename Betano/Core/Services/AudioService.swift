@@ -13,7 +13,7 @@ class AudioService {
         configureAudioSession()
     }
     
-    // MARK: - Audio Session
+
     func configureAudioSession() {
         guard !isAudioSessionConfigured else { return }
         
@@ -26,11 +26,10 @@ class AudioService {
             try AVAudioSession.sharedInstance().setActive(true)
             isAudioSessionConfigured = true
         } catch {
-            print("Failed to configure audio session: \(error)")
         }
     }
     
-    // MARK: - Sound Effects
+
     func playWorkStart() {
         playSystemSound(.workStart)
     }
@@ -55,10 +54,10 @@ class AudioService {
         
         var systemSoundID: SystemSoundID {
             switch self {
-            case .workStart: return 1304 // Begin Recording sound
-            case .restStart: return 1306 // End Recording sound
-            case .tick: return 1103 // Tock
-            case .complete: return 1025 // Fanfare
+            case .workStart: return 1304
+            case .restStart: return 1306
+            case .tick: return 1103
+            case .complete: return 1025
             }
         }
     }

@@ -53,7 +53,7 @@ struct UserPreferences: Codable {
     var soundEnabled: Bool
     var hapticEnabled: Bool
     var voiceCuesEnabled: Bool
-    var defaultCountdown: Int // 3, 5, or 10
+    var defaultCountdown: Int
     var keepScreenOn: Bool
     var backgroundAudioEnabled: Bool
     

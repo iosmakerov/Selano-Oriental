@@ -15,11 +15,11 @@ class AchievementService: ObservableObject {
         loadAchievements()
     }
     
-    // MARK: - Load/Save
+
     private func loadAchievements() {
         if let data = defaults.data(forKey: key),
            let saved = try? JSONDecoder().decode([Achievement].self, from: data) {
-            // Merge saved with all achievements (in case new ones were added)
+
             var merged = Achievement.all
             for saved in saved where saved.isUnlocked {
                 if let index = merged.firstIndex(where: { $0.id == saved.id }) {
@@ -39,13 +39,13 @@ class AchievementService: ObservableObject {
         }
     }
     
-    // MARK: - Check Achievements
+
     func checkAchievements(storage: StorageService) {
         let sessions = storage.sessionHistory
         let customWorkouts = storage.customWorkouts
         let stats = storage.weeklyStats
         
-        // Calculate totals
+
         let totalSessions = sessions.count
         let totalMinutes = sessions.reduce(0) { $0 + $1.totalDuration } / 60
         let totalRounds = sessions.reduce(0) { $0 + $1.roundsCompleted }
@@ -83,7 +83,7 @@ class AchievementService: ObservableObject {
         saveAchievements()
     }
     
-    // MARK: - Stats
+
     var unlockedCount: Int {
         achievements.filter { $0.isUnlocked }.count
     }

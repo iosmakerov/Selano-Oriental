@@ -19,7 +19,7 @@ struct ContentView: View {
                 ActiveSessionView(workout: workout)
             }
             
-            // Achievement Popup
+
             if let achievement = achievementService.newlyUnlocked {
                 Color.black.opacity(0.6)
                     .ignoresSafeArea()

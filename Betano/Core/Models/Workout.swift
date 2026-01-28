@@ -3,15 +3,15 @@ import Foundation
 struct Workout: Codable, Identifiable, Equatable {
     let id: UUID
     var name: String
-    var workDuration: Int // seconds
-    var restDuration: Int // seconds
+    var workDuration: Int
+    var restDuration: Int
     var rounds: Int
-    var warmupDuration: Int // seconds, default 0
-    var cooldownDuration: Int // seconds, default 0
-    var countdownDuration: Int // seconds, default 3
+    var warmupDuration: Int
+    var cooldownDuration: Int
+    var countdownDuration: Int
     let createdAt: Date
     var lastUsedAt: Date?
-    var isPreset: Bool // true for built-in presets
+    var isPreset: Bool
     
     var totalDuration: Int {
         warmupDuration + (workDuration + restDuration) * rounds + cooldownDuration
@@ -57,7 +57,6 @@ struct Workout: Codable, Identifiable, Equatable {
     }
 }
 
-// MARK: - Presets
 extension Workout {
     static let presets: [Workout] = [
         Workout(

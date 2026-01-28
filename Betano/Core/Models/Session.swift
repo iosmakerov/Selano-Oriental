@@ -6,13 +6,13 @@ struct Session: Codable, Identifiable {
     let workoutName: String
     let startedAt: Date
     let completedAt: Date?
-    let totalDuration: Int // seconds actually elapsed
+    let totalDuration: Int
     let roundsCompleted: Int
     let roundsTotal: Int
-    let workTimeTotal: Int // seconds
-    let restTimeTotal: Int // seconds
-    var completionPercentage: Double // 0.0 - 1.0
-    var caloriesBurned: Int // estimated calories
+    let workTimeTotal: Int
+    let restTimeTotal: Int
+    var completionPercentage: Double
+    var caloriesBurned: Int
     
     var formattedDate: String {
         let formatter = DateFormatter()
@@ -67,7 +67,6 @@ struct Session: Codable, Identifiable {
     }
 }
 
-// MARK: - Grouping
 extension Session {
     static func groupByDate(_ sessions: [Session]) -> [(String, [Session])] {
         let calendar = Calendar.current

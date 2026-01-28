@@ -12,16 +12,16 @@ struct StatsView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
-                        // Weekly Overview
+
                         weeklyOverviewCard
                         
-                        // Weekly Chart
+
                         weeklyChartCard
                         
-                        // All Time Stats
+
                         allTimeStatsCard
                         
-                        // Personal Records
+
                         personalRecordsCard
                     }
                     .padding(AppSpacing.md)
@@ -40,7 +40,7 @@ struct StatsView: View {
         }
     }
     
-    // MARK: - Weekly Overview
+
     private var weeklyOverviewCard: some View {
         let stats = storage.weeklyStats
         
@@ -76,7 +76,7 @@ struct StatsView: View {
             .reduce(0) { $0 + $1.caloriesBurned }
     }
     
-    // MARK: - Weekly Chart
+
     private var weeklyChartCard: some View {
         VStack(alignment: .leading, spacing: AppSpacing.md) {
             Text("Activity This Week")
@@ -88,7 +88,7 @@ struct StatsView: View {
                     VStack(spacing: AppSpacing.xs) {
                         RoundedRectangle(cornerRadius: 4)
                             .fill(data.minutes > 0 ? AppColors.boltRed : AppColors.backgroundElevated)
-                            .frame(width: 36, height: max(CGFloat(data.minutes) * 2, 4))
+                            .frame(width: 32, height: max(min(CGFloat(data.minutes) * 1.5, 60), 4))
                         
                         Text(data.day)
                             .font(AppFonts.caption)
@@ -97,7 +97,7 @@ struct StatsView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .frame(height: 120, alignment: .bottom)
+            .frame(minHeight: 80, maxHeight: 100, alignment: .bottom)
         }
         .padding(AppSpacing.lg)
         .background(AppColors.backgroundCard)
@@ -122,7 +122,7 @@ struct StatsView: View {
         }
     }
     
-    // MARK: - All Time Stats
+
     private var allTimeStatsCard: some View {
         let allTime = allTimeStats
         
@@ -162,7 +162,7 @@ struct StatsView: View {
         return (sessions.count, totalMinutes, rounds, calories, firstDate)
     }
     
-    // MARK: - Personal Records
+
     private var personalRecordsCard: some View {
         VStack(alignment: .leading, spacing: AppSpacing.md) {
             Text("Personal Records")
@@ -194,14 +194,14 @@ struct StatsView: View {
     }
     
     private var bestStreak: Int {
-        storage.weeklyStats.streak // Simplified - would need historical tracking for true best
+        storage.weeklyStats.streak
     }
     
     private var mostCalories: Int {
         storage.sessionHistory.max(by: { $0.caloriesBurned < $1.caloriesBurned })?.caloriesBurned ?? 0
     }
     
-    // MARK: - Helpers
+
     private func formatMinutes(_ seconds: Int) -> String {
         let minutes = seconds / 60
         return "\(minutes) min"
@@ -217,7 +217,6 @@ struct StatsView: View {
     }
 }
 
-// MARK: - Supporting Views
 struct StatBlock: View {
     let value: String
     let label: String

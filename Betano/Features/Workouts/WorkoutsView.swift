@@ -121,7 +121,6 @@ struct WorkoutsView: View {
     }
 }
 
-// MARK: - Empty State
 struct EmptyWorkoutsView: View {
     let onCreate: () -> Void
     
@@ -149,7 +148,6 @@ struct EmptyWorkoutsView: View {
     }
 }
 
-// MARK: - Workout Card
 struct WorkoutCardView: View {
     let workout: Workout
     let action: () -> Void

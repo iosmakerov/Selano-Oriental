@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum AppFonts {
-    // Using SF Pro (system font)
+
     static let timerDisplay = Font.system(size: 96, weight: .bold, design: .rounded)
     static let timerDisplayMedium = Font.system(size: 72, weight: .bold, design: .rounded)
     static let h1 = Font.system(size: 28, weight: .bold)

@@ -24,7 +24,7 @@ enum SessionPhase: Sendable {
 
 @MainActor
 class SessionViewModel: ObservableObject {
-    // MARK: - Published Properties
+
     @Published var currentPhase: SessionPhase = .countdown
     @Published var timeRemaining: Int = 0
     @Published var currentRound: Int = 1
@@ -34,7 +34,7 @@ class SessionViewModel: ObservableObject {
     @Published var motivationalText: String = ""
     @Published var showMotivation: Bool = false
     
-    // MARK: - Properties
+
     let workout: Workout
     private var timer: AnyCancellable?
     private var startTime: Date?
@@ -107,7 +107,7 @@ class SessionViewModel: ObservableObject {
         return Double(completedPhases) / Double(totalPhases)
     }
     
-    // MARK: - Init
+
     init(workout: Workout) {
         self.workout = workout
         setupInitialState()
@@ -120,7 +120,7 @@ class SessionViewModel: ObservableObject {
         startTime = Date()
     }
     
-    // MARK: - Timer Control
+
     func start() {
         startTimer()
         keepScreenOn(true)
@@ -163,11 +163,11 @@ class SessionViewModel: ObservableObject {
             timeRemaining -= 1
             totalElapsedTime += 1
             
-            // Track work/rest time
+
             if currentPhase == .work {
                 workTimeAccumulated += 1
                 
-                // Show motivational text at key moments during work
+
                 if timeRemaining == currentPhaseDuration - 1 {
                     showMotivationalText(MotivationalPhrases.randomWorkStart())
                 } else if timeRemaining == 5 {
@@ -176,23 +176,23 @@ class SessionViewModel: ObservableObject {
             } else if currentPhase == .rest {
                 restTimeAccumulated += 1
                 
-                // Prepare for next round
+
                 if timeRemaining == 3 {
                     showMotivationalText(MotivationalPhrases.randomRestEnd())
                 }
             }
             
-            // Check for halfway point
+
             if currentRound == workout.rounds / 2 && currentPhase == .work && timeRemaining == currentPhaseDuration - 1 {
                 showMotivationalText(MotivationalPhrases.randomHalfway())
             }
             
-            // Last round notification
+
             if currentRound == workout.rounds && currentPhase == .work && timeRemaining == currentPhaseDuration - 1 {
                 showMotivationalText(MotivationalPhrases.randomLastRound())
             }
             
-            // Countdown sounds
+
             if timeRemaining <= 3 && timeRemaining > 0 {
                 AudioService.shared.playCountdownTick()
                 HapticService.shared.countdownTick()
@@ -208,7 +208,7 @@ class SessionViewModel: ObservableObject {
         motivationalText = text
         showMotivation = true
         
-        // Hide after delay
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             self?.showMotivation = false
         }
@@ -288,11 +288,11 @@ class SessionViewModel: ObservableObject {
         )
         storage.addSession(session)
         
-        // Check for new achievements
+
         achievementService.checkAchievements(storage: storage)
     }
     
-    // MARK: - Computed Stats
+
     var estimatedCalories: Int {
         CalorieService.calculateCalories(
             workSeconds: workTimeAccumulated,

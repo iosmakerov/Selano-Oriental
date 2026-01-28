@@ -27,7 +27,7 @@ class HapticService {
         StorageService.shared.preferences.hapticEnabled
     }
     
-    // MARK: - Phase Transitions
+
     func phaseChange() {
         guard isEnabled else { return }
         impactHeavy.impactOccurred()
@@ -43,13 +43,13 @@ class HapticService {
         notificationGenerator.notificationOccurred(.warning)
     }
     
-    // MARK: - Countdown
+
     func countdownTick() {
         guard isEnabled else { return }
         impactMedium.impactOccurred()
     }
     
-    // MARK: - Session
+
     func sessionComplete() {
         guard isEnabled else { return }
         notificationGenerator.notificationOccurred(.success)
@@ -59,7 +59,7 @@ class HapticService {
         }
     }
     
-    // MARK: - UI Feedback
+
     func selection() {
         guard isEnabled else { return }
         selectionGenerator.selectionChanged()

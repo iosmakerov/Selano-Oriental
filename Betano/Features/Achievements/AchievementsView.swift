@@ -17,10 +17,10 @@ struct AchievementsView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
-                        // Progress Header
+
                         progressHeader
                         
-                        // Achievements Grid
+
                         LazyVGrid(columns: columns, spacing: AppSpacing.md) {
                             ForEach(achievementService.achievements) { achievement in
                                 AchievementCard(achievement: achievement)
@@ -78,7 +78,6 @@ struct AchievementsView: View {
     }
 }
 
-// MARK: - Achievement Card
 struct AchievementCard: View {
     let achievement: Achievement
     
@@ -119,7 +118,6 @@ struct AchievementCard: View {
     }
 }
 
-// MARK: - Achievement Unlocked Popup
 struct AchievementUnlockedView: View {
     let achievement: Achievement
     let onDismiss: () -> Void

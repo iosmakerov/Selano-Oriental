@@ -21,7 +21,7 @@ struct WorkoutEditorView: View {
     private var isValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty &&
         name.count <= 30 &&
-        totalDuration <= 3600 // 60 minutes max
+        totalDuration <= 3600
     }
     
     private var totalDuration: Int {
@@ -67,7 +67,7 @@ struct WorkoutEditorView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
-                        // Name Field
+
                         VStack(alignment: .leading, spacing: AppSpacing.sm) {
                             Text("Workout Name")
                                 .font(AppFonts.caption)
@@ -89,7 +89,7 @@ struct WorkoutEditorView: View {
                                 )
                         }
                         
-                        // Interval Configuration
+
                         VStack(spacing: AppSpacing.md) {
                             DurationStepper(
                                 title: "Work",
@@ -114,7 +114,7 @@ struct WorkoutEditorView: View {
                             )
                         }
                         
-                        // Preview
+
                         VStack(spacing: AppSpacing.sm) {
                             Text("Total Duration")
                                 .font(AppFonts.caption)
@@ -124,7 +124,7 @@ struct WorkoutEditorView: View {
                                 .font(AppFonts.timerDisplayMedium)
                                 .foregroundColor(AppColors.textPrimary)
                             
-                            // Timeline Preview
+
                             TimelinePreview(
                                 workDuration: workDuration,
                                 restDuration: restDuration,
@@ -135,7 +135,7 @@ struct WorkoutEditorView: View {
                         .background(AppColors.backgroundCard)
                         .cornerRadius(AppCorners.large)
                         
-                        // Advanced Options
+
                         DisclosureGroup(isExpanded: $showAdvanced) {
                             VStack(spacing: AppSpacing.md) {
                                 DurationStepper(
@@ -216,7 +216,6 @@ struct WorkoutEditorView: View {
     }
 }
 
-// MARK: - Duration Stepper
 struct DurationStepper: View {
     let title: String
     @Binding var value: Int
@@ -278,7 +277,6 @@ struct DurationStepper: View {
     }
 }
 
-// MARK: - Rounds Stepper
 struct RoundsStepper: View {
     let title: String
     @Binding var value: Int
@@ -329,7 +327,6 @@ struct RoundsStepper: View {
     }
 }
 
-// MARK: - Timeline Preview
 struct TimelinePreview: View {
     let workDuration: Int
     let restDuration: Int
@@ -360,7 +357,6 @@ struct TimelinePreview: View {
     }
 }
 
-// MARK: - Countdown Picker
 struct CountdownPicker: View {
     @Binding var value: Int
     
