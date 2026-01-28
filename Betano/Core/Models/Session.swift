@@ -12,6 +12,7 @@ struct Session: Codable, Identifiable {
     let workTimeTotal: Int // seconds
     let restTimeTotal: Int // seconds
     var completionPercentage: Double // 0.0 - 1.0
+    var caloriesBurned: Int // estimated calories
     
     var formattedDate: String {
         let formatter = DateFormatter()
@@ -45,7 +46,8 @@ struct Session: Codable, Identifiable {
         roundsTotal: Int,
         workTimeTotal: Int,
         restTimeTotal: Int,
-        completionPercentage: Double
+        completionPercentage: Double,
+        caloriesBurned: Int? = nil
     ) {
         self.id = id
         self.workoutId = workoutId
@@ -58,6 +60,10 @@ struct Session: Codable, Identifiable {
         self.workTimeTotal = workTimeTotal
         self.restTimeTotal = restTimeTotal
         self.completionPercentage = completionPercentage
+        self.caloriesBurned = caloriesBurned ?? CalorieService.calculateCalories(
+            workSeconds: workTimeTotal,
+            restSeconds: restTimeTotal
+        )
     }
 }
 

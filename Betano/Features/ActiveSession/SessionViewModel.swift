@@ -31,6 +31,8 @@ class SessionViewModel: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var isCompleted: Bool = false
     @Published var totalElapsedTime: Int = 0
+    @Published var motivationalText: String = ""
+    @Published var showMotivation: Bool = false
     
     // MARK: - Properties
     let workout: Workout
@@ -39,6 +41,7 @@ class SessionViewModel: ObservableObject {
     private var workTimeAccumulated: Int = 0
     private var restTimeAccumulated: Int = 0
     private let storage = StorageService.shared
+    private let achievementService = AchievementService.shared
     
     var progress: Double {
         guard timeRemaining > 0 else { return 1.0 }
@@ -163,8 +166,30 @@ class SessionViewModel: ObservableObject {
             // Track work/rest time
             if currentPhase == .work {
                 workTimeAccumulated += 1
+                
+                // Show motivational text at key moments during work
+                if timeRemaining == currentPhaseDuration - 1 {
+                    showMotivationalText(MotivationalPhrases.randomWorkStart())
+                } else if timeRemaining == 5 {
+                    showMotivationalText(MotivationalPhrases.workEnd.randomElement() ?? "Finish!")
+                }
             } else if currentPhase == .rest {
                 restTimeAccumulated += 1
+                
+                // Prepare for next round
+                if timeRemaining == 3 {
+                    showMotivationalText(MotivationalPhrases.randomRestEnd())
+                }
+            }
+            
+            // Check for halfway point
+            if currentRound == workout.rounds / 2 && currentPhase == .work && timeRemaining == currentPhaseDuration - 1 {
+                showMotivationalText(MotivationalPhrases.randomHalfway())
+            }
+            
+            // Last round notification
+            if currentRound == workout.rounds && currentPhase == .work && timeRemaining == currentPhaseDuration - 1 {
+                showMotivationalText(MotivationalPhrases.randomLastRound())
             }
             
             // Countdown sounds
@@ -176,6 +201,16 @@ class SessionViewModel: ObservableObject {
         
         if timeRemaining == 0 {
             handlePhaseComplete()
+        }
+    }
+    
+    private func showMotivationalText(_ text: String) {
+        motivationalText = text
+        showMotivation = true
+        
+        // Hide after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.showMotivation = false
         }
     }
     
@@ -252,6 +287,17 @@ class SessionViewModel: ObservableObject {
             completionPercentage: completionPercentage
         )
         storage.addSession(session)
+        
+        // Check for new achievements
+        achievementService.checkAchievements(storage: storage)
+    }
+    
+    // MARK: - Computed Stats
+    var estimatedCalories: Int {
+        CalorieService.calculateCalories(
+            workSeconds: workTimeAccumulated,
+            restSeconds: restTimeAccumulated
+        )
     }
     
     private func keepScreenOn(_ on: Bool) {

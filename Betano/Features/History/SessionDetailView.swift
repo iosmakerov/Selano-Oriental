@@ -127,7 +127,7 @@ struct SessionDetailView: View {
             
             HStack(spacing: AppSpacing.md) {
                 StatCard(icon: "pause.circle", title: "Rest Time", value: formatDuration(session.restTimeTotal))
-                StatCard(icon: "bolt.fill", title: "Intensity", value: intensityLabel)
+                StatCard(icon: "flame.circle.fill", title: "Calories", value: "\(session.caloriesBurned) kcal")
             }
         }
         .padding(.horizontal, AppSpacing.md)

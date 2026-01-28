@@ -2,24 +2,39 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var storage = StorageService.shared
+    @StateObject private var achievementService = AchievementService.shared
     @State private var selectedTab = 0
     @State private var selectedWorkout: Workout?
-    @State private var showSettings = false
     
     var body: some View {
-        Group {
-            if !storage.onboardingCompleted {
-                OnboardingView()
-            } else {
-                mainTabView
+        ZStack {
+            Group {
+                if !storage.onboardingCompleted {
+                    OnboardingView()
+                } else {
+                    mainTabView
+                }
+            }
+            .fullScreenCover(item: $selectedWorkout) { workout in
+                ActiveSessionView(workout: workout)
+            }
+            
+            // Achievement Popup
+            if let achievement = achievementService.newlyUnlocked {
+                Color.black.opacity(0.6)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        achievementService.dismissNewAchievement()
+                    }
+                
+                AchievementUnlockedView(achievement: achievement) {
+                    achievementService.dismissNewAchievement()
+                }
+                .transition(.scale.combined(with: .opacity))
+                .zIndex(100)
             }
         }
-        .fullScreenCover(item: $selectedWorkout) { workout in
-            ActiveSessionView(workout: workout)
-        }
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-        }
+        .animation(.spring(response: 0.4), value: achievementService.newlyUnlocked != nil)
     }
     
     private var mainTabView: some View {
@@ -30,11 +45,6 @@ struct ContentView: View {
                     Text("Quick Start")
                 }
                 .tag(0)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        settingsButton
-                    }
-                }
             
             WorkoutsView(selectedWorkout: $selectedWorkout)
                 .tabItem {
@@ -53,24 +63,6 @@ struct ContentView: View {
         .tint(AppColors.boltRed)
         .onAppear {
             configureTabBarAppearance()
-        }
-        .overlay(alignment: .topTrailing) {
-            settingsButton
-                .padding(.top, 8)
-                .padding(.trailing, 16)
-        }
-    }
-    
-    private var settingsButton: some View {
-        Button {
-            showSettings = true
-        } label: {
-            Image(systemName: "gearshape.fill")
-                .font(.system(size: 18))
-                .foregroundColor(AppColors.textSecondary)
-                .frame(width: 36, height: 36)
-                .background(AppColors.backgroundCard)
-                .clipShape(Circle())
         }
     }
     

@@ -85,6 +85,21 @@ struct ActiveSessionView: View {
             
             Spacer()
             
+            // Motivational Text
+            if viewModel.showMotivation {
+                Text(viewModel.motivationalText)
+                    .font(AppFonts.h2)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, AppSpacing.lg)
+                    .padding(.vertical, AppSpacing.sm)
+                    .background(AppColors.boltRed.opacity(0.9))
+                    .cornerRadius(AppCorners.medium)
+                    .transition(.scale.combined(with: .opacity))
+                    .animation(.spring(response: 0.3), value: viewModel.showMotivation)
+            }
+            
+            Spacer()
+            
             // Timer Display
             timerDisplay
             
@@ -343,6 +358,7 @@ struct CompletedView: View {
                 StatRow(title: "Duration", value: formatDuration(viewModel.totalElapsedTime))
                 StatRow(title: "Rounds", value: "\(viewModel.workout.rounds)")
                 StatRow(title: "Work Time", value: formatDuration(viewModel.workout.workDuration * viewModel.workout.rounds))
+                StatRow(title: "Calories", value: "\(viewModel.estimatedCalories) kcal")
             }
             .padding(AppSpacing.lg)
             .background(AppColors.backgroundCard)

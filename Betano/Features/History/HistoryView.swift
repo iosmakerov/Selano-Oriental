@@ -5,6 +5,7 @@ struct HistoryView: View {
     @State private var selectedSession: Session?
     @State private var showDeleteConfirmation = false
     @State private var sessionToDelete: Session?
+    @State private var showStats = false
     
     @Binding var selectedWorkout: Workout?
     
@@ -26,10 +27,23 @@ struct HistoryView: View {
             }
             .navigationTitle("History")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showStats = true
+                    } label: {
+                        Image(systemName: "chart.xyaxis.line")
+                            .foregroundColor(AppColors.boltRed)
+                    }
+                }
+            }
             .sheet(item: $selectedSession) { session in
                 SessionDetailView(session: session) {
                     repeatSession(session)
                 }
+            }
+            .sheet(isPresented: $showStats) {
+                StatsView()
             }
             .alert("Delete Session?", isPresented: $showDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {}
