@@ -35,15 +35,6 @@ struct SettingsView: View {
                                 )
                             )
                             
-                            SettingsToggle(
-                                title: "Voice Cues",
-                                icon: "mic.fill",
-                                isOn: Binding(
-                                    get: { storage.preferences.voiceCuesEnabled },
-                                    set: { storage.preferences.voiceCuesEnabled = $0 }
-                                ),
-                                badge: "Coming Soon"
-                            )
                         }
                         
                         // Timer Preferences
@@ -81,27 +72,6 @@ struct SettingsView: View {
                                 icon: "info.circle.fill",
                                 value: appVersion
                             )
-                            
-                            SettingsLink(
-                                title: "Rate on App Store",
-                                icon: "star.fill"
-                            ) {
-                                openAppStore()
-                            }
-                            
-                            SettingsLink(
-                                title: "Privacy Policy",
-                                icon: "hand.raised.fill"
-                            ) {
-                                // Open privacy policy URL
-                            }
-                            
-                            SettingsLink(
-                                title: "Terms of Service",
-                                icon: "doc.text.fill"
-                            ) {
-                                // Open terms URL
-                            }
                         }
                         
                         // Data
@@ -169,12 +139,6 @@ struct SettingsView: View {
         return "\(version) (\(build))"
     }
     
-    private func openAppStore() {
-        // Replace with actual App Store URL when available
-        if let url = URL(string: "https://apps.apple.com") {
-            UIApplication.shared.open(url)
-        }
-    }
 }
 
 // MARK: - Settings Section

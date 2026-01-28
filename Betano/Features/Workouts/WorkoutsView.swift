@@ -3,7 +3,6 @@ import SwiftUI
 struct WorkoutsView: View {
     @StateObject private var storage = StorageService.shared
     @Binding var selectedWorkout: Workout?
-    @Binding var showActiveSession: Bool
     
     @State private var showEditor = false
     @State private var editingWorkout: Workout?
@@ -105,7 +104,6 @@ struct WorkoutsView: View {
     private func startWorkout(_ workout: Workout) {
         storage.markWorkoutAsUsed(workout)
         selectedWorkout = workout
-        showActiveSession = true
     }
     
     private func duplicateWorkout(_ workout: Workout) {
@@ -202,5 +200,5 @@ struct WorkoutCardView: View {
 }
 
 #Preview {
-    WorkoutsView(selectedWorkout: .constant(nil), showActiveSession: .constant(false))
+    WorkoutsView(selectedWorkout: .constant(nil))
 }

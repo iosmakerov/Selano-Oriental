@@ -7,7 +7,6 @@ struct HistoryView: View {
     @State private var sessionToDelete: Session?
     
     @Binding var selectedWorkout: Workout?
-    @Binding var showActiveSession: Bool
     
     var groupedSessions: [(String, [Session])] {
         Session.groupByDate(storage.sessionHistory)
@@ -100,7 +99,6 @@ struct HistoryView: View {
                 rounds: session.roundsTotal
             )
         }
-        showActiveSession = true
     }
 }
 
@@ -246,5 +244,5 @@ struct SessionRowView: View {
 }
 
 #Preview {
-    HistoryView(selectedWorkout: .constant(nil), showActiveSession: .constant(false))
+    HistoryView(selectedWorkout: .constant(nil))
 }

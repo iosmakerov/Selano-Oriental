@@ -10,11 +10,7 @@ struct ActiveSessionView: View {
     }
     
     var body: some View {
-        ZStack {
-            // Background
-            backgroundView
-                .ignoresSafeArea()
-            
+        Group {
             if viewModel.isCompleted {
                 CompletedView(viewModel: viewModel, onDismiss: { dismiss() })
             } else if viewModel.isPaused {
@@ -23,6 +19,11 @@ struct ActiveSessionView: View {
                 activeSessionContent
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            backgroundView
+                .ignoresSafeArea()
+        )
         .onAppear {
             viewModel.start()
         }
@@ -40,31 +41,39 @@ struct ActiveSessionView: View {
     // MARK: - Background
     @ViewBuilder
     private var backgroundView: some View {
-        switch viewModel.currentPhase {
-        case .work:
-            Image("phase_work")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .overlay(
+        GeometryReader { geometry in
+            switch viewModel.currentPhase {
+            case .work:
+                ZStack {
+                    Image("phase_work")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .clipped()
+                    
                     LinearGradient(
                         colors: [AppColors.boltRedDark.opacity(0.8), AppColors.backgroundPrimary.opacity(0.9)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
-                )
-        case .rest, .cooldown:
-            Image("phase_rest")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .overlay(
+                }
+            case .rest, .cooldown:
+                ZStack {
+                    Image("phase_rest")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .clipped()
+                    
                     LinearGradient(
                         colors: [AppColors.restPhase.opacity(0.3), AppColors.backgroundPrimary.opacity(0.95)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
-                )
-        default:
-            AppColors.backgroundPrimary
+                }
+            default:
+                AppColors.backgroundPrimary
+            }
         }
     }
     

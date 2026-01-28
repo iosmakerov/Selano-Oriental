@@ -4,7 +4,6 @@ struct ContentView: View {
     @StateObject private var storage = StorageService.shared
     @State private var selectedTab = 0
     @State private var selectedWorkout: Workout?
-    @State private var showActiveSession = false
     @State private var showSettings = false
     
     var body: some View {
@@ -15,10 +14,8 @@ struct ContentView: View {
                 mainTabView
             }
         }
-        .fullScreenCover(isPresented: $showActiveSession) {
-            if let workout = selectedWorkout {
-                ActiveSessionView(workout: workout)
-            }
+        .fullScreenCover(item: $selectedWorkout) { workout in
+            ActiveSessionView(workout: workout)
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
@@ -27,7 +24,7 @@ struct ContentView: View {
     
     private var mainTabView: some View {
         TabView(selection: $selectedTab) {
-            QuickStartView(selectedWorkout: $selectedWorkout, showActiveSession: $showActiveSession)
+            QuickStartView(selectedWorkout: $selectedWorkout)
                 .tabItem {
                     Image(systemName: "bolt.fill")
                     Text("Quick Start")
@@ -39,14 +36,14 @@ struct ContentView: View {
                     }
                 }
             
-            WorkoutsView(selectedWorkout: $selectedWorkout, showActiveSession: $showActiveSession)
+            WorkoutsView(selectedWorkout: $selectedWorkout)
                 .tabItem {
                     Image(systemName: "list.bullet.rectangle.portrait")
                     Text("Workouts")
                 }
                 .tag(1)
             
-            HistoryView(selectedWorkout: $selectedWorkout, showActiveSession: $showActiveSession)
+            HistoryView(selectedWorkout: $selectedWorkout)
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
                     Text("History")

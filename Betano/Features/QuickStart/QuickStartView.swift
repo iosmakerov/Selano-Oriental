@@ -2,7 +2,6 @@ import SwiftUI
 
 struct QuickStartView: View {
     @Binding var selectedWorkout: Workout?
-    @Binding var showActiveSession: Bool
     
     let columns = [
         GridItem(.flexible(), spacing: AppSpacing.md),
@@ -52,7 +51,6 @@ struct QuickStartView: View {
     
     private func startWorkout(_ workout: Workout) {
         selectedWorkout = workout
-        showActiveSession = true
     }
 }
 
@@ -66,50 +64,54 @@ struct FeaturedPresetCard: View {
             HapticService.shared.lightImpact()
             action()
         }) {
-            ZStack {
-                // Background
-                Image("quickstart_featured_bg")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                
-                LinearGradient(
-                    colors: [AppColors.boltRed, AppColors.boltRedDark],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .opacity(0.9)
-                
-                // Content
-                HStack {
-                    VStack(alignment: .leading, spacing: AppSpacing.sm) {
-                        Image(systemName: "bolt.fill")
-                            .font(.system(size: 32))
-                            .foregroundColor(.white.opacity(0.9))
-                        
-                        Spacer()
-                        
-                        Text(workout.name)
-                            .font(AppFonts.h2)
-                            .foregroundColor(.white)
-                        
-                        Text(workout.formattedDuration)
-                            .font(AppFonts.caption)
-                            .foregroundColor(.white.opacity(0.8))
-                            .padding(.horizontal, AppSpacing.sm)
-                            .padding(.vertical, AppSpacing.xs)
-                            .background(.white.opacity(0.2))
-                            .cornerRadius(AppCorners.small)
-                    }
+            HStack {
+                VStack(alignment: .leading, spacing: AppSpacing.sm) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 32))
+                        .foregroundColor(.white.opacity(0.9))
                     
                     Spacer()
                     
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 48))
-                        .foregroundColor(.white.opacity(0.3))
+                    Text(workout.name)
+                        .font(AppFonts.h2)
+                        .foregroundColor(.white)
+                    
+                    Text(workout.formattedDuration)
+                        .font(AppFonts.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                        .padding(.horizontal, AppSpacing.sm)
+                        .padding(.vertical, AppSpacing.xs)
+                        .background(.white.opacity(0.2))
+                        .cornerRadius(AppCorners.small)
                 }
-                .padding(AppSpacing.lg)
+                
+                Spacer()
+                
+                Image(systemName: "play.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.white.opacity(0.3))
             }
+            .padding(AppSpacing.lg)
             .frame(height: 180)
+            .frame(maxWidth: .infinity)
+            .background(
+                GeometryReader { geometry in
+                    ZStack {
+                        Image("quickstart_featured_bg")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .clipped()
+                        
+                        LinearGradient(
+                            colors: [AppColors.boltRed, AppColors.boltRedDark],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                        .opacity(0.9)
+                    }
+                }
+            )
             .clipShape(RoundedRectangle(cornerRadius: AppCorners.large))
         }
         .accessibilityLabel("Start \(workout.name)")
@@ -178,5 +180,5 @@ struct PresetCardView: View {
 }
 
 #Preview {
-    QuickStartView(selectedWorkout: .constant(nil), showActiveSession: .constant(false))
+    QuickStartView(selectedWorkout: .constant(nil))
 }
