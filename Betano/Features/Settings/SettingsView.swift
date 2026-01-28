@@ -6,6 +6,8 @@ struct SettingsView: View {
     
     @State private var showClearHistoryAlert = false
     @State private var showResetAlert = false
+    @State private var showDemoDataAlert = false
+    @State private var showDemoDataSuccess = false
     
     var body: some View {
         NavigationStack {
@@ -77,6 +79,14 @@ struct SettingsView: View {
 
                         SettingsSection(title: "Data") {
                             SettingsButton(
+                                title: "Load Demo Data",
+                                icon: "square.and.arrow.down.fill",
+                                isDestructive: false
+                            ) {
+                                showDemoDataAlert = true
+                            }
+                            
+                            SettingsButton(
                                 title: "Clear History",
                                 icon: "trash.fill",
                                 isDestructive: true
@@ -129,6 +139,21 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("This will reset all settings to their default values.")
+            }
+            .alert("Load Demo Data?", isPresented: $showDemoDataAlert) {
+                Button("Cancel", role: .cancel) {}
+                Button("Load") {
+                    storage.loadDemoData()
+                    AchievementService.shared.checkAchievements(storage: storage)
+                    showDemoDataSuccess = true
+                }
+            } message: {
+                Text("This will add sample workouts and training history to demonstrate app features.")
+            }
+            .alert("Demo Data Loaded", isPresented: $showDemoDataSuccess) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Added 3 custom workouts and 12 training sessions. Check your History and Achievements!")
             }
         }
     }

@@ -190,4 +190,74 @@ class StorageService: ObservableObject {
     func resetToDefaults() {
         preferences = .default
     }
+    
+    func loadDemoData() {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let demoWorkout1 = Workout(
+            name: "Morning Burn",
+            workDuration: 40,
+            restDuration: 20,
+            rounds: 6,
+            warmupDuration: 10,
+            cooldownDuration: 10,
+            countdownDuration: 5
+        )
+        
+        let demoWorkout2 = Workout(
+            name: "Quick HIIT",
+            workDuration: 30,
+            restDuration: 15,
+            rounds: 8
+        )
+        
+        let demoWorkout3 = Workout(
+            name: "Endurance Plus",
+            workDuration: 60,
+            restDuration: 30,
+            rounds: 10,
+            warmupDuration: 30,
+            cooldownDuration: 30
+        )
+        
+        customWorkouts.append(contentsOf: [demoWorkout1, demoWorkout2, demoWorkout3])
+        
+        var demoSessions: [Session] = []
+        
+        for dayOffset in 0..<7 {
+            guard let sessionDate = calendar.date(byAdding: .day, value: -dayOffset, to: now) else { continue }
+            
+            let sessionsForDay = dayOffset < 3 ? 2 : 1
+            
+            for sessionIndex in 0..<sessionsForDay {
+                let preset = Workout.presets[sessionIndex % Workout.presets.count]
+                let hourOffset = sessionIndex == 0 ? 9 : 18
+                
+                guard let startTime = calendar.date(bySettingHour: hourOffset, minute: 0, second: 0, of: sessionDate) else { continue }
+                
+                let workTime = preset.workDuration * preset.rounds
+                let restTime = preset.restDuration * (preset.rounds - 1)
+                let totalDuration = workTime + restTime
+                
+                let session = Session(
+                    workoutId: preset.id,
+                    workoutName: preset.name,
+                    startedAt: startTime,
+                    completedAt: startTime.addingTimeInterval(Double(totalDuration)),
+                    totalDuration: totalDuration,
+                    roundsCompleted: preset.rounds,
+                    roundsTotal: preset.rounds,
+                    workTimeTotal: workTime,
+                    restTimeTotal: restTime,
+                    completionPercentage: 1.0
+                )
+                
+                demoSessions.append(session)
+            }
+        }
+        
+        demoSessions.sort { $0.startedAt > $1.startedAt }
+        sessionHistory.insert(contentsOf: demoSessions, at: 0)
+    }
 }
