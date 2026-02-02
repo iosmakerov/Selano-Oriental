@@ -8,6 +8,7 @@ struct SettingsView: View {
     @State private var showResetAlert = false
     @State private var showDemoDataAlert = false
     @State private var showDemoDataSuccess = false
+    @State private var showContactWebView = false
     
     var body: some View {
         NavigationStack {
@@ -68,6 +69,15 @@ struct SettingsView: View {
                         }
                         
 
+                        SettingsSection(title: "Support") {
+                            SettingsLink(
+                                title: "Contact Us",
+                                icon: "envelope.fill"
+                            ) {
+                                showContactWebView = true
+                            }
+                        }
+                        
                         SettingsSection(title: "About") {
                             SettingsRow(
                                 title: "Version",
@@ -154,6 +164,9 @@ struct SettingsView: View {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text("Added 3 custom workouts and 12 training sessions. Check your History and Achievements!")
+            }
+            .sheet(isPresented: $showContactWebView) {
+                ContactWebView(urlString: "https://form.jotform.com/260282890661158")
             }
         }
     }
